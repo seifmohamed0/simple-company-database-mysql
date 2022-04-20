@@ -1,0 +1,95 @@
+create table employee(
+	emp_id int primary key,
+    first_name varchar(40),
+    last_name varchar(40),
+    birth_date date,
+    sex varchar(1),
+    salary int,
+    super_id int ,
+    branch_id int
+);
+
+create table branch(
+	branch_id int primary key,
+    branch_name varchar(40),
+    mgr_id int,
+    mgr_start_date date ,
+    foreign key(mgr_id)references employee(emp_id)on delete set null
+);
+
+alter table employee add foreign key(branch_id)references branch(branch_id) on delete set null;
+alter table employee add foreign key(super_id)references employee(emp_id)on delete set null;
+
+create table client(
+	client_id int primary key,
+    client_name varchar(40),
+    branch_id int,
+    foreign key(branch_id)references branch(branch_id)on delete set null
+);
+
+create table works_with(
+	emp_id int,
+    client_id int,
+    total_sales int,
+    primary key(emp_id , client_id)
+);
+
+create table branch_supplier(
+	branch_id int ,
+    supplier_name varchar(40),
+    supply_type varchar(40),
+    primary key(branch_id , supplier_name)
+);
+
+insert into branch values(1 , 'corporate' , null , '2006-02-09');
+insert into branch values(2 , 'scranton' , null , '1992-04-06');
+insert into branch values(3 , 'stamford' , null , '1998-02-13');
+
+insert into employee values(100 , 'david' , 'wallace' , '1967-11-17' , 'M' , 250.000 , null , 1);
+insert into employee values(101 , 'jan' , 'levinson' , '1961-05-11' , 'F' , 110.000 , 100 , 1);
+insert into employee values(102 , 'michael' , 'scott' , '1964-03-15' , 'M' , 75.000 , 100 , 2);
+insert into employee values(103 , 'angela' , 'martin' , '1971-06-25' , 'F' , 63.000 , 102 , 2);
+insert into employee values(104 , 'kelly' , 'kapoor' , '1980-02-05' , 'F' , 55.000 , 102 , 2);
+insert into employee values(105 , 'stanley' , 'hudson' , '1958-02-19' , 'M' , 69.000 , 102 , 2);
+insert into employee values(106 , 'josh' , 'porter' , '1969-09-05' , 'M' , 78.000 , 100 , 3);
+insert into employee values(107 , 'andy' , 'bernard' , '1973-07-22' , 'M' , 65.000 , 106 , 3);
+insert into employee values(108 , 'jim' , 'halpert' , '1978-10-01' , 'M' , 71.000 , 106 , 3);
+
+update branch 
+set mgr_id = 100
+where branch_id = 1;
+
+update branch 
+set mgr_id = 102
+where branch_id = 2;
+
+update branch 
+set mgr_id = 106
+where branch_id = 3;
+
+insert into client values(400 , 'dunmore highschool' , 2);
+insert into client values(401 , 'lackawana country' , 2);
+insert into client values(402 , 'fedex' , 3);
+insert into client values(403 , 'john daly law,llc' , 3);
+insert into client values(404 , 'scranton whitepages' , 2);
+insert into client values(405 , 'times newspaper' , 3);
+insert into client values(406 , 'fedex' , 2);
+
+insert into works_with values(105 , 400 , 55.000);
+insert into works_with values(102 , 401 , 267.000);
+insert into works_with values(108 , 402 , 22.000);
+insert into works_with values(107 , 403 , 5.000);
+insert into works_with values(108 , 403 , 12.000);
+insert into works_with values(105 , 404 , 33.000);
+insert into works_with values(107 , 405 , 26.000);
+insert into works_with values(102 , 406 , 15.000);
+insert into works_with values(105 , 406 , 130.000);
+
+insert into branch_supplier values(2 , 'hammer mill' , 'paper');
+insert into branch_supplier values(2 , 'uni-ball' , 'writing utensils');
+insert into branch_supplier values(3 , 'patriotpaper' , 'paper');
+insert into branch_supplier values(2 , 'j.t.forms&labels' , 'custom forms');
+insert into branch_supplier values(3 , 'uni-ball' , 'writing utensils');
+insert into branch_supplier values(3 , 'hammer mill' , 'paper');
+insert into branch_supplier values(3 , 'stamford labels' , 'custom forms');
+
