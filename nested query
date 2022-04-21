@@ -1,0 +1,11 @@
+select * from client 
+where branch_id =(
+	select branch_id from branch
+	where branch.mgr_id in(
+		select emp_id from employee
+		where first_name = 'michael'
+	)
+    limit 1
+);
+
+
